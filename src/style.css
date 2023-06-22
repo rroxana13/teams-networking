@@ -1,3 +1,14 @@
 h1 {
   color: #057988;
 }
+
+#teamsTable {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+
+#teamsTable th,
+#teamsTable td {
+  border: 1px solid #057988;
+}

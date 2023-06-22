@@ -1,6 +1,62 @@
-h1 {
-  color: #057988;
+html {
+  height: 100%;
 }
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  margin: 0;
+}
+
+header {
+  background-image: url("images/th.png");
+}
+
+#header-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: linear-gradient(45deg, #0798abfa, transparent);
+}
+
+header h1 {
+  margin: 5px 0;
+  color: #fff;
+}
+
+header h2 {
+  margin: 5px 0;
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: 100;
+}
+
+#header-info {
+  text-shadow: 1px 1px 2px #000000;
+  flex: 1;
+  padding: 10px;
+}
+
+#my-picture {
+  padding: 5px;
+  width: 108px;
+  height: 108px;
+}
+
+#my-picture img {
+  border: 4px solid #fff;
+  border-radius: 50%;
+  background-color: #ffffff90;
+}
+
+#main {
+  flex: 1;
+}
+
+/* h1 {
+  color: #057988;
+} */
 
 #teamsTable {
   width: 100%;

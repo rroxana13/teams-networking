@@ -68,3 +68,15 @@ header h2 {
 #teamsTable td {
   border: 1px solid #057988;
 }
+
+.remove-btn:hover {
+  text-decoration: underline;
+  color: darkred;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  text-decoration: underline;
+  color: green;
+  cursor: pointer;
+}

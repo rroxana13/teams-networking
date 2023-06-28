@@ -88,19 +88,27 @@ function onSubmit(e) {
   const name = $("input[name=name]").value;
   const url = $("input[name=url]").value;
   const team = {
-    id: editId,
     promotion,
     members,
     name: name,
     url: url
   };
-  console.warn("submit", team);
-  updateTeamRequest(team).then(status => {
-    if (status.success) {
-      // v.1
-      window.location.reload();
-    }
-  });
+  if (editId) {
+    team.id = editId;
+    updateTeamRequest(team).then(status => {
+      if (status.success) {
+        // v.1
+        window.location.reload();
+      }
+    });
+  } else {
+    createTeamRequest(team).then(status => {
+      if (status.success) {
+        // v.1
+        window.location.reload();
+      }
+    });
+  }
 }
 
 function initEvents() {

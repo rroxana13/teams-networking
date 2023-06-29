@@ -7,6 +7,7 @@ body {
   flex-direction: column;
   min-height: 100%;
   margin: 0;
+  background-color: #e9f6f8;
 }
 
 header {
@@ -52,23 +53,36 @@ header h2 {
 
 #main {
   flex: 1;
+  padding: 15px;
 }
-
-/* h1 {
-  color: #057988;
-} */
 
 #teamsTable {
   width: 100%;
-  text-align: center;
   border-collapse: collapse;
 }
 
 #teamsTable th,
 #teamsTable td {
   border: 1px solid #057988;
+  padding: 5px;
 }
 
+#teamsTable th {
+  background-color: #0798ab;
+  color: #fff;
+}
+
+#teamsTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#teamsTable tfoot input {
+  width: 100%;
+}
+
+#teamsTable tfoot input:not([type="images"]) {
+  box-sizing: border-box;
+}
 .remove-btn:hover {
   text-decoration: underline;
   color: darkred;
@@ -106,4 +120,12 @@ footer a:visited {
   border-radius: 0.2em;
   transition: 0.5s;
   text-decoration: none;
+}
+
+footer .item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
 }

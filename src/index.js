@@ -111,18 +111,19 @@ function onSubmit(e) {
   }
 }
 
-function searchTeams(e) {
-  let searchText = e.target.value.toLowerCase();
-  const teams = allTeams.filter(team => {
-    const matches = Object.entries(team).some(entry => {
+function filterTeams(allTeams, searchText) {
+  return allTeams.filter(team => {
+    return Object.entries(team).some(entry => {
       if (entry[0] !== "id") {
         return entry[1].toLowerCase().includes(searchText);
       }
     });
-
-    return matches;
   });
+}
 
+function searchTeams(e) {
+  let searchText = e.target.value.toLowerCase();
+  const teams = filterTeams(allTeams, searchText);
   displayTeams(teams);
 }
 
@@ -132,10 +133,9 @@ function initEvents() {
   $("#teamsTable tbody").addEventListener("click", e => {
     if (e.target.matches("a.remove-btn")) {
       const id = e.target.dataset.id;
-      //console.warn("remove %o", id);
+
       deleteTeamRequest(id).then(status => {
         if (status.success) {
-          //console.warn("delete done", status);
           loadTeams();
         }
       });

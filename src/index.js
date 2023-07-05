@@ -6,15 +6,16 @@ function $(selector) {
   return document.querySelector(selector);
 }
 
-function getTeamAsHtml(team) {
+function getTeamAsHTML({ id, promotion, members, name, url }) {
+  const displayUrl = url.startsWith("https://github.com/") ? url.substring(19) : url;
   return `<tr>
-    <td>${team.promotion}</td>
-    <td>${team.members}</td>
-    <td>${team.name}</td>
-    <td>${team.url}</td>
+  <td>${promotion}</td>
+  <td>${members}</td>
+  <td>${name}</td>
+  <td><a href="${url}" target="_blank">${displayUrl}</a></td>
     <td>
-      <a data-id=${team.id} class="remove-btn" >✖</a>
-      <a data-id=${team.id} class="edit-btn"> &#9998; </a>
+    <a data-id="${id}" class="remove-btn">✖</a>
+    <a data-id="${id}" class="edit-btn">&#9998;</a>
     </td>
     </tr>`;
 }
@@ -34,7 +35,7 @@ function displayTeams(teams) {
   previewDisplayTeams = teams;
   console.warn("displayTeams", teams);
 
-  const teamsHTML = teams.map(getTeamAsHtml);
+  const teamsHTML = teams.map(getTeamAsHTML);
 
   $("#teamsTable tbody").innerHTML = teamsHTML.join("");
 }
@@ -60,7 +61,7 @@ function deleteTeamRequest(id, callback) {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ id: id })
+    body: JSON.stringify({ id })
   })
     .then(r => r.json())
     .then(status => {
@@ -72,10 +73,6 @@ function deleteTeamRequest(id, callback) {
 }
 
 function updateTeamRequest(team) {
-  setTimeout(() => {
-    console.warn("updated");
-    team.members = "😎";
-  }, 5000);
   return fetch("http://localhost:3000/teams-json/update", {
     method: "PUT",
     headers: {
@@ -101,11 +98,11 @@ function startEdit(id) {
   setTeamValues(team);
 }
 
-function setTeamValues(team) {
-  $("#promotion").value = team.promotion;
-  $("#members").value = team.members;
-  $("input[name=name]").value = team.name;
-  $("input[name=url]").value = team.url;
+function setTeamValues({ promotion, members, name, url }) {
+  $("#promotion").value = promotion;
+  $("#members").value = members;
+  $("input[name=name]").value = name;
+  $("input[name=url]").value = url;
 }
 
 function getTeamValues() {
@@ -126,8 +123,8 @@ function onSubmit(e) {
   const team = getTeamValues();
   if (editId) {
     team.id = editId;
-    updateTeamRequest(team).then(status => {
-      if (status.success) {
+    updateTeamRequest(team).then(({ success }) => {
+      if (success) {
         allTeams = allTeams.map(t => {
           if (t.id === editId) {
             console.warn("team", team);
@@ -181,9 +178,8 @@ function initEvents() {
     if (e.target.matches("a.remove-btn")) {
       const id = e.target.dataset.id;
 
-      deleteTeamRequest(id, status => {
-        if (status.success) {
-          console.warn("delete done", status);
+      deleteTeamRequest(id, ({ success }) => {
+        if (success) {
           loadTeams();
         }
       });

@@ -19,7 +19,15 @@
     </header>
 
     <div id="main">
-      <input type="search" name="search" id="searchTeams" /> 🔎
+      <div class="tbar">
+        <div>
+          <button id="removeSelected">❌Remove selected</button>
+        </div>
+        <div>
+          <input type="search" name="search" id="searchTeams" placeholder="Search" />
+          <label for="searchTeams">🔎</label>
+        </div>
+      </div>
 
       <form id="teamsForm" action="" method="get">
         <table id="teamsTable">

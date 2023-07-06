@@ -56,6 +56,20 @@ header h2 {
   padding: 15px;
 }
 
+.tbar {
+  display: flex;
+  padding-block: 10px;
+}
+
+.tbar div:first-child {
+  flex: 1;
+}
+
+.tbar label {
+  padding: 0 5px;
+  cursor: pointer;
+}
+
 #teamsTable {
   width: 100%;
   border-collapse: collapse;

@@ -123,6 +123,7 @@ function getTeamValues() {
 function onSubmit(e) {
   e.preventDefault();
   const team = getTeamValues();
+  showLoadingMask();
   if (editId) {
     team.id = editId;
     updateTeamRequest(team).then(({ success }) => {
@@ -142,6 +143,7 @@ function onSubmit(e) {
 
         displayTeams(allTeams);
         $("#teamsForm").reset();
+        hideLoadingMask();
       }
     });
   } else {
@@ -154,6 +156,7 @@ function onSubmit(e) {
         displayTeams(allTeams);
 
         $("#teamsForm").reset();
+        hideLoadingMask();
       }
     });
   }
@@ -170,6 +173,14 @@ function filterElements(elements, search) {
   });
 }
 
+function hideLoadingMask() {
+  $("#teamsForm").classList.remove("loading-mask");
+}
+
+function showLoadingMask() {
+  $("#teamsForm").classList.add("loading-mask");
+}
+
 function initEvents() {
   $("#searchTeams").addEventListener("input", e => {
     const teams = filterElements(allTeams, e.target.value);
@@ -180,9 +191,10 @@ function initEvents() {
     if (e.target.matches("a.remove-btn")) {
       const id = e.target.dataset.id;
 
-      deleteTeamRequest(id, ({ success }) => {
+      deleteTeamRequest(id, async ({ success }) => {
         if (success) {
-          loadTeams();
+          await loadTeams();
+          hideLoadingMask();
         }
       });
     } else if (e.target.matches("a.edit-btn")) {
@@ -215,11 +227,7 @@ function sleep(ms) {
 initEvents();
 
 (async () => {
-  $("#teamsForm").classList.add("loading-mask");
-  // loadTeams().then(teams => {
-  //   $("#teamsForm").classList.remove("loading-mask");
-  // });
-
-  const teams = await loadTeams();
-  $("#teamsForm").classList.remove("loading-mask");
+  showLoadingMask();
+  await loadTeams();
+  hideLoadingMask();
 })();

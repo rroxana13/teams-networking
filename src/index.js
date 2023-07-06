@@ -212,3 +212,7 @@ function sleep(ms) {
 
 loadTeams();
 initEvents();
+
+$("#teamsForm").classList.add("loading-mask");
+await sleep(5000);
+$("#teamsForm").classList.remove("loading-mask");

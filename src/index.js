@@ -204,12 +204,10 @@ function sleep(ms) {
   });
 }
 
-(() => {
+(async () => {
   console.info("start sleeping...");
-  sleep(1000).then(() => {
-    console.warn("ready to do %o", "next job");
-  });
-  console.warn("executed before sleep.then");
+  await sleep(5000);
+  console.warn("2. ready to do %o", "next job");
 })();
 
 loadTeams();

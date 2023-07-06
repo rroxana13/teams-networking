@@ -1,10 +1,9 @@
 import "./style.css";
+import { $, mask, unmask, filterElements } from "./utilities";
+
 let editId;
 let allTeams = [];
-
-function $(selector) {
-  return document.querySelector(selector);
-}
+const form = $("#teamsForm");
 
 function getTeamAsHTML({ id, promotion, members, name, url }) {
   const displayUrl = url.startsWith("https://github.com/") ? url.substring(19) : url;
@@ -123,7 +122,7 @@ function getTeamValues() {
 async function onSubmit(e) {
   e.preventDefault();
   const team = getTeamValues();
-  showLoadingMask();
+  mask(form);
 
   let status;
 
@@ -155,27 +154,8 @@ async function onSubmit(e) {
   if (status.success) {
     displayTeams(allTeams);
     $("#teamsForm").reset();
-    hideLoadingMask();
+    unmask(form);
   }
-}
-
-function filterElements(elements, search) {
-  search = search.toLowerCase();
-  return elements.filter(element => {
-    return Object.entries(element).some(([key, value]) => {
-      if (key !== "id") {
-        return value.toLowerCase().includes(search);
-      }
-    });
-  });
-}
-
-function hideLoadingMask() {
-  $("#teamsForm").classList.remove("loading-mask");
-}
-
-function showLoadingMask() {
-  $("#teamsForm").classList.add("loading-mask");
 }
 
 function initEvents() {
@@ -191,7 +171,7 @@ function initEvents() {
       deleteTeamRequest(id, async ({ success }) => {
         if (success) {
           await loadTeams();
-          hideLoadingMask();
+          unmask(form);
         }
       });
     } else if (e.target.matches("a.edit-btn")) {
@@ -207,24 +187,10 @@ function initEvents() {
   });
 }
 
-function sleep(ms) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  });
-}
-
-(async () => {
-  console.info("start sleeping...");
-  await sleep(5000);
-  console.warn("2. ready to do %o", "next job");
-})();
-
 initEvents();
 
 (async () => {
-  showLoadingMask();
+  mask(form);
   await loadTeams();
-  hideLoadingMask();
+  unmask(form);
 })();

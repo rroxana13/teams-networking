@@ -41,18 +41,20 @@ function displayTeams(teams) {
 }
 
 function loadTeams() {
-  fetch("http://localhost:3000/teams-json", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-    .then(r => r.json())
+  return loadTeamsRequest().then(teams => {
+    allTeams = teams;
+    displayTeams(teams);
+    return teams;
+  });
 
-    .then(teams => {
-      allTeams = teams;
-      displayTeams(teams);
-    });
+  function loadTeamsRequest() {
+    return fetch("http://localhost:3000/teams-json", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(r => r.json());
+  }
 }
 
 function deleteTeamRequest(id, callback) {
@@ -210,9 +212,14 @@ function sleep(ms) {
   console.warn("2. ready to do %o", "next job");
 })();
 
-loadTeams();
 initEvents();
 
-$("#teamsForm").classList.add("loading-mask");
-await sleep(5000);
-$("#teamsForm").classList.remove("loading-mask");
+(async () => {
+  $("#teamsForm").classList.add("loading-mask");
+  // loadTeams().then(teams => {
+  //   $("#teamsForm").classList.remove("loading-mask");
+  // });
+
+  const teams = await loadTeams();
+  $("#teamsForm").classList.remove("loading-mask");
+})();

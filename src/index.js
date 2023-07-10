@@ -1,5 +1,6 @@
 import "./style.css";
 import { $, mask, unmask, filterElements } from "./utilities";
+import { loadTeamsRequest, createTeamRequest, updateTeamRequest, deleteTeamRequest } from "./middleware";
 
 let editId;
 let allTeams = [];
@@ -45,52 +46,6 @@ function loadTeams() {
     displayTeams(teams);
     return teams;
   });
-
-  function loadTeamsRequest() {
-    return fetch("http://localhost:3000/teams-json", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(r => r.json());
-  }
-}
-
-function deleteTeamRequest(id, callback) {
-  return fetch("http://localhost:3000/teams-json/delete", {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ id })
-  })
-    .then(r => r.json())
-    .then(status => {
-      if (typeof callback === "function") {
-        callback(status);
-      }
-      return status;
-    });
-}
-
-function updateTeamRequest(team) {
-  return fetch("http://localhost:3000/teams-json/update", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(team)
-  }).then(r => r.json());
-}
-
-function createTeamRequest(team) {
-  return fetch("http://localhost:3000/teams-json/create", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(team)
-  }).then(r => r.json());
 }
 
 function startEdit(id) {

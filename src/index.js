@@ -1,5 +1,5 @@
 import "./style.css";
-import { $, mask, unmask, filterElements } from "./utilities";
+import { $, mask, unmask, filterElements, debounce } from "./utilities";
 import { loadTeamsRequest, createTeamRequest, updateTeamRequest, deleteTeamRequest } from "./middleware";
 
 let editId;
@@ -113,22 +113,6 @@ async function onSubmit(e) {
   }
 }
 
-function debounce(fn, ms) {
-  let timer;
-  console.info("debounce", ms);
-
-  return function (e) {
-    console.info("inside debounce...", timer);
-
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-      console.warn("debounce timeout");
-      fn(e);
-    }, ms);
-    //console.info("timer %o", timer);
-  };
-}
-
 function initEvents() {
   $("#removeSelected").addEventListener(
     "click",
@@ -138,8 +122,8 @@ function initEvents() {
   );
   $("#searchTeams").addEventListener(
     "input",
-    debounce(e => {
-      console.info("search:", e.target.value);
+    debounce(function (e) {
+      console.info("search:", this.value, e.target.value);
       const teams = filterElements(allTeams, e.target.value);
       displayTeams(teams);
     }, 400)

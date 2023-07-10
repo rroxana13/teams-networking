@@ -31,12 +31,6 @@ export function sleep(ms) {
   });
 }
 
-(async () => {
-  console.info("start sleeping...");
-  await sleep(5000);
-  console.warn("2. ready to do %o", "next job");
-})();
-
 export function filterElements(elements, search) {
   search = search.toLowerCase();
   return elements.filter(element => {
@@ -47,3 +41,9 @@ export function filterElements(elements, search) {
     });
   });
 }
+
+(async () => {
+  console.info("start sleeping...");
+  await sleep(5000);
+  console.warn("2. ready to do %o", "next job");
+})();

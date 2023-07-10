@@ -43,7 +43,7 @@ export function filterElements(elements, search) {
 }
 
 (async () => {
-  console.info("start sleeping...");
+  //console.info("start sleeping...");
   await sleep(5000);
-  console.warn("2. ready to do %o", "next job");
+  //console.warn("2. ready to do %o", "next job");
 })();

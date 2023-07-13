@@ -1,5 +1,5 @@
 import "./style.css";
-import { $, debounce, mask, unmask, filterElements } from "./utilities";
+import { $, debounce, mask, unmask, filterElements, sleep } from "./utilities";
 import { loadTeamsRequest, createTeamRequest, updateTeamRequest, deleteTeamRequest } from "./middleware";
 //import { debounce } from "lodash"; bad- don't import all functions
 //import debounce from "lodash/debounce"; better
@@ -118,10 +118,13 @@ async function onSubmit(e) {
 
 async function removeSelected() {
   mask("#main");
+  //console.time("remove");
   const selected = document.querySelectorAll("input[name=selected]:checked");
   const ids = [...selected].map(input => input.value);
   const promises = ids.map(id => deleteTeamRequest(id));
+  promises.push(sleep(2000));
   const statuses = await Promise.allSettled(promises);
+  //console.timeEnd("remove");
   console.warn("statuses", statuses);
 
   // selected.forEach(input => {

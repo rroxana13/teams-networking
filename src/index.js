@@ -11,15 +11,16 @@ const form = $("#teamsForm");
 function getTeamAsHTML({ id, promotion, members, name, url }) {
   const displayUrl = url.startsWith("https://github.com/") ? url.substring(19) : url;
   return `<tr>
-  <td>${promotion}</td>
-  <td>${members}</td>
-  <td>${name}</td>
-  <td><a href="${url}" target="_blank">${displayUrl}</a></td>
+    <td style="text-align: center"> <input type="checkbox" name="selected" value="${id}" /></td>
+    <td>${promotion}</td>
+    <td>${members}</td>
+    <td>${name}</td>
+    <td><a href="${url}" target="_blank">${displayUrl}</a></td>
     <td>
-    <a data-id="${id}" class="remove-btn">✖</a>
-    <a data-id="${id}" class="edit-btn">&#9998;</a>
+      <a data-id="${id}" class="remove-btn">✖</a>
+      <a data-id="${id}" class="edit-btn">&#9998;</a>
     </td>
-    </tr>`;
+  </tr>`;
 }
 
 let previewDisplayTeams = [];
@@ -115,13 +116,25 @@ async function onSubmit(e) {
   }
 }
 
+async function removeSelected() {
+  mask("#main");
+  const selected = document.querySelectorAll("input[name=selected]:checked");
+  const ids = [...selected].map(input => input.value);
+  const promises = ids.map(id => deleteTeamRequest(id));
+  const statuses = await Promise.allSettled(promises);
+  console.warn("statuses", statuses);
+
+  // selected.forEach(input => {
+  //   console.warn(input.value);
+  //   deleteTeamRequest(input.value);
+  // });
+
+  await loadTeams();
+  unmask("#main");
+}
+
 function initEvents() {
-  $("#removeSelected").addEventListener(
-    "click",
-    debounce(() => {
-      console.info("remove all");
-    }, 3000)
-  );
+  $("#removeSelected").addEventListener("click", debounce(removeSelected, 200));
   $("#searchTeams").addEventListener(
     "input",
     debounce(function (e) {
